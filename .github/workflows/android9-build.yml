@@ -32,7 +32,18 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
+      - name: Upload manifest merger reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest-reports
+          path: |
+            app/build/outputs/logs/**
+            app/build/intermediates/merged_manifests/**
+          if-no-files-found: ignore
+
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Smartspacer-Android9-debug
